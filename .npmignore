@@ -1,0 +1,12 @@
+# ignore all file
+**/*.js
+**/*.ts
+**/*.eslintignore
+.github
+.babelrc
+tsconfig.json
+package-lock.json
+
+# exclude lib
+!src/lib/**/*.js
+!src/lib/**/*.ts
