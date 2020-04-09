@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "JavaScript port of r7kamura/markdiff",
   "main": "lib/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tetsugi/markdiff.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tetsugi/markdiff.js/issues"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack",
     "build": "cross-env NODE_ENV=production webpack",
