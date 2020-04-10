@@ -7,14 +7,18 @@ type ConstructorArgs = {
 
 export default class Operation {
 
-  readonly priority = 3
+  readonly priority: number = 3
   
   readonly targetNode: Node
 
-  insertedNode?: Node
+  protected _insertedNode?: Node
 
   constructor({ insertedNode, targetNode }: ConstructorArgs) {
-    this.insertedNode = insertedNode
+    this._insertedNode = insertedNode
     this.targetNode = targetNode
+  }
+
+  get insertedNode() {
+    return this._insertedNode
   }
 }
