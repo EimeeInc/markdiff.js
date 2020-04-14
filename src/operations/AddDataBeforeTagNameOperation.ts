@@ -1,13 +1,12 @@
 import Operation from "./Operation"
-import type { Node } from "domhandler"
 
 type ConstructorArgs = {
-  afterTagName: Node;
+  afterTagName: string;
 } & ConstructorParameters<typeof Operation>[0]
 
 export default class AddDataBeforeTagNameOperation extends Operation {
 
-  readonly afterTagName: Node
+  readonly afterTagName: string
 
   constructor({ afterTagName, ...rest }: ConstructorArgs) {
     super(rest)
