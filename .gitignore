@@ -4,3 +4,5 @@ dist
 yarn-error.log
 .vscode
 lib
+.cache
+public

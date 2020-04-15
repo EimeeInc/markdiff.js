@@ -11,8 +11,10 @@
     "baseUrl": "./",
     "rootDir": "src",
     "outDir": "lib",
+    "jsx": "react",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "types/*": ["types/*"]
     }
   },
   "include": ["src/**/*"]

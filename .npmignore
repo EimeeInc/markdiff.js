@@ -6,7 +6,12 @@
 .babelrc
 tsconfig.json
 package-lock.json
+public
+.cache
 
 # exclude lib
 !src/lib/**/*.js
 !src/lib/**/*.ts
+
+# ignore gatsby
+src/lib/pages/**/*.ts

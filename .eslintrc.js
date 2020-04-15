@@ -10,10 +10,12 @@ module.exports = {
   plugins: [
     "@typescript-eslint",
     "sort-imports-es6-autofix",
+    "react",
     "jest",
   ],
   extends: [
     "eslint:recommended",
+    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
   ],
   env: {
@@ -36,6 +38,8 @@ module.exports = {
       "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
     }],
     "space-infix-ops": "error",
+    "react/display-name": "off",
+    "react/prop-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-use-before-define": ["error", { "functions": false }],
