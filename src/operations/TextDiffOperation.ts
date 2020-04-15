@@ -25,7 +25,7 @@ export default class TextDiffOperation extends Operation {
 
     const html = diffChars(beforeElements, afterElements)
       .map(({ added, removed, value }) =>
-        added ? `<ins>${value}</ins>`
+        added ? `<ins class="ins">${value}</ins>`
         : removed ? `<del class="del">${value}</del>`
         : value,
       )

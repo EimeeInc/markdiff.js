@@ -11,12 +11,12 @@ export default class AddPreviousSiblingOperation extends Operation {
     if (!node) return undefined
 
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
-      const clone = parseDOM(`<ins>${toHtml(node)}</ins>`)[0] as Element
+      const clone = parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)[0] as Element
       const element = clone.children[0] as Element
       element.attribs.class = (node.attribs?.class?.split(" ") ?? []).concat("added").join(" ")
       return clone
     } else {
-      return parseDOM(`<ins>${toHtml(node)}</ins>`)[0]
+      return parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)[0]
     }
   }
 }

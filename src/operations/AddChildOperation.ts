@@ -11,10 +11,10 @@ export default class AddChildOperation extends Operation {
 
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
       node.attribs.class = (node.attribs?.class?.split(" ") ?? []).concat("added").join(" ")
-      node.children = parseDOM(`<ins>${toHtml(node)}</ins>`)
+      node.children = parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)
       return node
     } else {
-      return parseDOM(`<ins>${toHtml(node)}</ins>`)[0]
+      return parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)[0]
     }
   }
 }
