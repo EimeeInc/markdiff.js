@@ -1,23 +1,21 @@
 const path = require("path")
 const nodeExternals = require("webpack-node-externals")
 
-const isProd = process.NODE_ENV === "production"
-
 module.exports = {
-  mode: isProd ? "production" : "development",
   target: "node",
   externals: [nodeExternals()],
-  entry: path.resolve(__dirname, "src/index.ts"),
+  entry: path.resolve(__dirname, "src", "index.ts"),
   output: {
+    filename: "index.js",
     path: path.join(process.cwd(), "lib"),
-    library: "markdiff",
-    libraryTarget: "umd",
+    library: "MarkDiff",
+    libraryTarget: "commonjs2",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   },
-  devtool: isProd ? "source-map" : false,
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(ts|js)$/,
         exclude: /node_modules/,
         use: "babel-loader",
       },
@@ -33,8 +31,5 @@ module.exports = {
       "@": path.resolve(__dirname, "src"),
     },
     extensions: [".js", ".ts"],
-  },
-  optimization: {
-    minimize: isProd,
   },
 }

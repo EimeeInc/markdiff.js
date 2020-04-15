@@ -33,7 +33,9 @@ export default function toHtml(item?: Node | Node[]): string {
     case "comment": return `<!-- ${item.data} -->`
     case "cdata": return `<!CDATA['${item.data}']>`
   }
+
   if (!isElement(item)) return ""
+  if (item.fragment) return toHtml(item.children)
   
   const { name, attribs, children } = item
   const keys = Object.keys(attribs)

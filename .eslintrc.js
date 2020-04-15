@@ -23,6 +23,7 @@ module.exports = {
   rules: {
     "comma-dangle": ["error", "only-multiline"],
     "eol-last": ["error", "always"],
+    "no-constant-condition": ["error", { "checkLoops": false }],
     "no-multi-spaces": "error",
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
@@ -34,6 +35,8 @@ module.exports = {
     }],
     "space-infix-ops": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-use-before-define": ["error", { "functions": false }],
     "@typescript-eslint/no-var-requires": "off",
   },
 }

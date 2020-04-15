@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "module": "commonjs",
     "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "lib": ["dom", "esnext"],
+    "declaration": true,
+    "baseUrl": "./",
+    "rootDir": "src",
+    "outDir": "lib",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": [
-    "./src/**/*", "types/definitions.d.ts"
-  ]
+  "include": ["src/**/*"]
 }

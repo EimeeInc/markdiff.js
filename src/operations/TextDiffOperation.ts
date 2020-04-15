@@ -24,15 +24,14 @@ export default class TextDiffOperation extends Operation {
     const afterElements = toHtml(this.afterNode)
 
     const html = diffChars(beforeElements, afterElements)
-      .filter(({ added, removed }) => added || removed)
       .map(({ added, removed, value }) =>
         added ? `<ins>${value}</ins>`
         : removed ? `<del class="del">${value}</del>`
-        : "",
+        : value,
       )
       .join("")
 
-    const node = parseDOM(`<span>${html}</span>`)[0]
+    const node = parseDOM(`<fragment>${html}</fragment>`)[0]
     node.fragment = true
 
     return node

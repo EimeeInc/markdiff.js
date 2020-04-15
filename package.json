@@ -2,7 +2,7 @@
   "name": "markdiff.js",
   "version": "0.1.0",
   "description": "JavaScript port of r7kamura/markdiff",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tetsugi/markdiff.js.git"
@@ -11,8 +11,8 @@
     "url": "https://github.com/tetsugi/markdiff.js/issues"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack",
-    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production --devtool source-map",
     "debug": "ts-node ./src/index",
     "test": "jest"
   },
@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "core-js": "^3.6.4",
+    "deep-equal": "^2.0.2",
     "diff": "^4.0.2",
     "htmlparser2": "^4.1.0",
     "regenerator-runtime": "^0.13.5"
@@ -34,12 +35,12 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
+    "@types/deep-equal": "^1.0.1",
     "@types/diff": "^4.0.2",
     "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "babel-loader": "^8.1.0",
-    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-sort-imports-es6-autofix": "^0.5.0",
     "ts-jest": "^25.3.1",
