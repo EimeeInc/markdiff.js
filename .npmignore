@@ -15,3 +15,5 @@ public
 
 # ignore gatsby
 src/lib/pages/**/*.ts
+src/lib/components/**/*.ts
+src/lib/utils/markdown.ts
