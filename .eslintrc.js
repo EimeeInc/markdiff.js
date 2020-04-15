@@ -10,6 +10,7 @@ module.exports = {
   plugins: [
     "@typescript-eslint",
     "sort-imports-es6-autofix",
+    "jest",
   ],
   extends: [
     "eslint:recommended",
@@ -19,6 +20,7 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
+    "jest/globals": true,
   },
   rules: {
     "comma-dangle": ["error", "only-multiline"],
