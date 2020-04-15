@@ -22,7 +22,7 @@ export const helmetQuery = graphql`
 `
 
 const Helmet: React.FC<HelmetProps> = ({
-  lang = "ja",
+  lang = "en",
   title = "",
   description = "",
   meta = [],
