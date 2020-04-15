@@ -1,2 +1,7 @@
 export { default as Operation } from "./Operation"
 export { default as AddChildOperation } from "./AddChildOperation"
+export { default as AddDataBeforeHrefOperation } from "./AddDataBeforeHrefOperation"
+export { default as AddDataBeforeTagNameOperation } from "./AddDataBeforeTagNameOperation"
+export { default as AddPreviousSiblingOperation } from "./AddPreviousSiblingOperation"
+export { default as RemoveOperation } from "./RemoveOperation"
+export { default as TextDiffOperation } from "./TextDiffOperation"
