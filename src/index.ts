@@ -240,7 +240,7 @@ export function applyPatch(operations: Operation[], node: Node): Node {
   return node
 }
 
-export default function render(before: string, after: string): string {
+export function toTree(before: string, after: string): Node {
   const beforeNode = parseDOM(`<fragment>${before}</fragment>`)[0]
   beforeNode.fragment = true
 
@@ -248,5 +248,9 @@ export default function render(before: string, after: string): string {
   afterNode.fragment = true
 
   const patch = createPatch(beforeNode, afterNode)
-  return toHtml(applyPatch(patch, beforeNode))
+  return applyPatch(patch, beforeNode)
+}
+
+export default function render(before: string, after: string): string {
+  return toHtml(toTree(before, after))
 }
