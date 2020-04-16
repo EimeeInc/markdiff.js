@@ -209,7 +209,7 @@ export function applyPatch(operations: Operation[], node: Node): Node {
 
       case AddPreviousSiblingOperation:
         if (isElement(targetNode) && insertedNode) {
-          targetNode.parent?.children.splice(0, 0, insertedNode)
+          targetNode.parent?.children.unshift(insertedNode)
           
           if (targetNode.name !== "li" && targetNode.name !== "tr") {
             markLiOrTrAsChanged(targetNode)
