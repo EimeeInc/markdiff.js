@@ -1,20 +1,8 @@
 module.exports = {
-  "moduleFileExtensions": [
-    "ts",
-    "js"
-  ],
-  "transform": {
-    "^.+\\.ts$": "ts-jest"
+  testEnvironment: "node",
+  moduleNameMapper: {
+    "^@@/(.*)$": "<rootDir>/$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
-  "globals": {
-    "ts-jest": {
-      "tsConfig": "tsconfig.json",
-      "diagnostics": {
-        "pathRegex": "\\.(spec|test)\\.ts$"
-      }
-    }
-  },
-  "testMatch": [
-    "**/test/*.+(ts|js)"
-  ]
+  testPathIgnorePatterns: ["/node_modules/", "/.cache/"],
 }

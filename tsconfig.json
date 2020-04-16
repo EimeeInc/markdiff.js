@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "module": "commonjs",
     "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "esModuleInterop": true,
-    "lib": ["dom", "esnext"],
+    "declaration": true,
+    "baseUrl": "./",
+    "rootDir": "src",
+    "outDir": "lib",
+    "jsx": "react",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "types/*": ["types/*"]
     }
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
