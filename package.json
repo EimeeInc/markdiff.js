@@ -5,10 +5,10 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tetsugi/markdiff.js.git"
+    "url": "git+https://github.com/EimeeInc/markdiff.js.git"
   },
   "bugs": {
-    "url": "https://github.com/tetsugi/markdiff.js/issues"
+    "url": "https://github.com/EimeeInc/markdiff.js/issues"
   },
   "scripts": {
     "build": "webpack --mode production --devtool source-map",
@@ -23,7 +23,7 @@
     "html",
     "markdiff"
   ],
-  "author": "tetsugi",
+  "author": "EimeeInc",
   "license": "MIT",
   "dependencies": {
     "core-js": "^3.6.4",
