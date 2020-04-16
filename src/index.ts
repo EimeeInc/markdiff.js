@@ -48,10 +48,10 @@ const detectHrefDifference = (before: Element, after: Element): boolean =>
 function markLiOrTrAsChanged(node: Node): void {
   while (node.parent && !node.parent.fragment) {
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
-      const { class: clazz } = node.attribs
+      const { class: clazz = "" } = node.attribs
 
       if (!["added", "changed", "removed"].some((e) => clazz.includes(e))) {
-        node.attribs.class = clazz.split(" ").concat("changed").join(" ")
+        node.attribs.class = clazz.split(" ").concat("changed").filter((e) => e).join(" ")
       }
     }
 
@@ -64,7 +64,7 @@ function markTopLevelNodeAsChanged(node: Node): void {
   if (!node) return
   while (node.parent && !node.parent.fragment) node = node.parent
 
-  if (isElement(node) && !node.parent && node.attribs.class !== "changed") {
+  if (isElement(node) && node.parent && node.attribs.class !== "changed") {
     const children = clone(node)
     node.name = "div"
     node.attribs.class = "changed"
@@ -227,7 +227,9 @@ export function applyPatch(operations: Operation[], node: Node): Node {
         break
 
       case TextDiffOperation:
+        const parent = operation.targetNode.parent
         Object.assign(operation.targetNode, insertedNode)
+        targetNode.parent = parent
 
         if (targetNode.parent) {
           markLiOrTrAsChanged(targetNode.parent)

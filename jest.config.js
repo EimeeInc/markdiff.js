@@ -4,4 +4,5 @@ module.exports = {
     "^@@/(.*)$": "<rootDir>/$1",
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  testPathIgnorePatterns: ["/node_modules/", "/.cache/"],
 }
