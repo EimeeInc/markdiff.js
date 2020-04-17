@@ -60,7 +60,7 @@ function markLiOrTrAsChanged(node: Node): void {
   }
 }
 
-function markTopLevelNodeAsChanged(node: Node): void {
+function markTopLevelNodeAsChanged(node?: Node | null): void {
   if (!node) return
   while (node.parent && !node.parent.fragment) node = node.parent
 
@@ -70,6 +70,15 @@ function markTopLevelNodeAsChanged(node: Node): void {
     node.attribs.class = "changed"
     node.children = children
   }
+}
+
+function addPreviousSibling(targetNode: Node, insertedNode: Node): void {
+  const { parent } = targetNode
+  if (!parent) return
+
+  const { children } = parent
+  const index = children.findIndex((e) => e === targetNode)
+  children.splice(index, 0, insertedNode)
 }
 
 /**
@@ -95,16 +104,19 @@ function createPatchFromChildren(before: Node, after: Node): Operation[] {
   let beforeIndex = 0
   let afterIndex = 0
 
-  for (const { count = 0, added, removed } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
-    if (removed) beforeIndex += count
-    else if (added) afterIndex += count
+  const diffs: { added: boolean, removed: boolean }[] = []
+  
+  for (const { added = false, removed = false, value } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
+    diffs.push(...value.map(() => ({ added, removed })))
+  }
+
+  for (const { added, removed } of diffs) {
+    if (removed) beforeIndex++
+    else if (added) afterIndex++
 
     else {
-      const beforeChild = before.children[beforeIndex]
-      const afterChild = after.children[afterIndex]
-
-      beforeIndex += count
-      afterIndex += count
+      const beforeChild = before.children[beforeIndex++]
+      const afterChild = after.children[afterIndex++]
 
       identityMap.set(beforeChild, afterChild)
       invertedIdentityMap.set(afterChild, beforeChild)
@@ -181,7 +193,7 @@ export function createPatch(before: Node, after: Node): Operation[] {
 }
 
 export function applyPatch(operations: Operation[], node: Node): Node {
-  operations.sort((e) => e.priority).forEach((operation) => {
+  operations.sort((a, b) => b.priority - a.priority).forEach((operation) => {
     const { targetNode, insertedNode } = operation
     
     switch (operation.constructor) {
@@ -213,12 +225,12 @@ export function applyPatch(operations: Operation[], node: Node): Node {
 
       case AddPreviousSiblingOperation:
         if (isElement(targetNode) && insertedNode) {
-          targetNode.parent?.children.unshift(insertedNode)
+          addPreviousSibling(targetNode, insertedNode)
           
           if (targetNode.name !== "li" && targetNode.name !== "tr") {
             markLiOrTrAsChanged(targetNode)
           }
-          markTopLevelNodeAsChanged(targetNode)
+          markTopLevelNodeAsChanged(targetNode.parent)
         }
         break
 
@@ -254,7 +266,6 @@ export function toTree(before: string, after: string): Node {
   afterNode.fragment = true
 
   const patch = createPatch(beforeNode, afterNode)
-  console.log(patch)
   return applyPatch(patch, beforeNode)
 }
 
