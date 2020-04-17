@@ -95,13 +95,17 @@ function createPatchFromChildren(before: Node, after: Node): Operation[] {
   let beforeIndex = 0
   let afterIndex = 0
 
-  for (const { added, removed } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
-    if (removed) beforeIndex++
-    else if (added) afterIndex++
+  for (const { count = 0, added, removed } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
+    if (removed) beforeIndex += count
+    else if (added) afterIndex += count
 
     else {
       const beforeChild = before.children[beforeIndex]
       const afterChild = after.children[afterIndex]
+
+      beforeIndex += count
+      afterIndex += count
+
       identityMap.set(beforeChild, afterChild)
       invertedIdentityMap.set(afterChild, beforeChild)
     }
@@ -250,6 +254,7 @@ export function toTree(before: string, after: string): Node {
   afterNode.fragment = true
 
   const patch = createPatch(beforeNode, afterNode)
+  console.log(patch)
   return applyPatch(patch, beforeNode)
 }
 
