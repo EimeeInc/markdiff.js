@@ -241,7 +241,9 @@ export function applyPatch(operations: Operation[], node: Node): Node {
 
       case RemoveOperation:
         if (targetNode !== insertedNode) {
+          const { parent } = operation.targetNode
           Object.assign(operation.targetNode, insertedNode)
+          if (!targetNode.parent && parent && parent.parent) targetNode.parent = parent
         }
         markLiOrTrAsChanged(targetNode)
         markTopLevelNodeAsChanged(targetNode)
