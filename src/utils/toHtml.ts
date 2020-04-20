@@ -51,5 +51,3 @@ export default function toHtml(item?: Node | Node[]): string {
 
   return start + inner + end
 }
-
-export const clone = (node: Node) => parseDOM(toHtml(node))

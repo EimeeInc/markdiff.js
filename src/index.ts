@@ -13,7 +13,7 @@ import {
   TextDiffOperation,
 } from "./operations"
 import { isElement } from "./utils/typeGuard"
-import toHtml, { clone } from "./utils/toHtml"
+import toHtml from "./utils/toHtml"
 
 declare module "domhandler" {
   interface Node {
@@ -65,10 +65,10 @@ function markTopLevelNodeAsChanged(node?: Node | null): void {
   while (node.parent && !node.parent.fragment) node = node.parent
 
   if (isElement(node) && node.parent && node.attribs.class !== "changed") {
-    const children = clone(node)
+    const clone = { ...node, attribs: { ...node.attribs } }
     node.name = "div"
     node.attribs.class = "changed"
-    node.children = children
+    node.children = [clone]
   }
 }
 
