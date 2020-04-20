@@ -229,10 +229,10 @@ export function applyPatch(operations: Operation[], node: Node): Node {
         break
 
       case AddPreviousSiblingOperation:
-        if (isElement(targetNode) && insertedNode) {
+        if (insertedNode) {
           addPreviousSibling(targetNode, insertedNode)
           
-          if (targetNode.name !== "li" && targetNode.name !== "tr") {
+          if (isElement(targetNode) && targetNode.name !== "li" && targetNode.name !== "tr") {
             markLiOrTrAsChanged(targetNode)
           }
           markTopLevelNodeAsChanged(targetNode.parent)
