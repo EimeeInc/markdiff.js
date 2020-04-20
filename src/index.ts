@@ -44,8 +44,8 @@ const detectHrefDifference = (before: Element, after: Element): boolean =>
   && before.attribs.href !== after.attribs.href
   && toHtml(before.children) === toHtml(after.children)
 
-function markLiOrTrAsChanged(node: Node): void {
-  while (node.parent && !node.parent.fragment) {
+function markLiOrTrAsChanged(node?: Node | null): void {
+  if (node) while (node.parent && !node.parent.fragment) {
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
       const { class: clazz = "" } = node.attribs
 
@@ -248,14 +248,10 @@ export function applyPatch(operations: Operation[], node: Node): Node {
         break
 
       case TextDiffOperation:
-        const parent = operation.targetNode.parent
+        const { parent } = operation.targetNode
         Object.assign(operation.targetNode, insertedNode)
-        targetNode.parent = parent
-
-        if (targetNode.parent) {
-          markLiOrTrAsChanged(targetNode.parent)
-          markTopLevelNodeAsChanged(targetNode.parent)
-        }
+        markLiOrTrAsChanged(parent)
+        markTopLevelNodeAsChanged(parent)
         break
     }
   })
