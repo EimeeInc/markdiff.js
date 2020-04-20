@@ -101,28 +101,34 @@ function createPatchFromChildren(before: Node, after: Node): Operation[] {
   const identityMap = new Map<Node, Node>()
   const invertedIdentityMap = new Map<Node, Node>()
 
+  // Map only equal parts
   let beforeIndex = 0
   let afterIndex = 0
 
-  const diffs: { added: boolean, removed: boolean }[] = []
-  
-  for (const { added = false, removed = false, value } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
-    diffs.push(...value.map(() => ({ added, removed })))
-  }
+  const beforeHtmlList = before.children.map(toHtml)
+  const afterHtmlList = after.children.map(toHtml)
 
-  for (const { added, removed } of diffs) {
-    if (removed) beforeIndex++
-    else if (added) afterIndex++
+  while (beforeIndex < beforeHtmlList.length && afterIndex < afterHtmlList.length) {
+    const beforeHtml = beforeHtmlList[beforeIndex]
+    const afterHtml = afterHtmlList[afterIndex]
 
-    else {
+    if (beforeHtml === afterHtml) {
       const beforeChild = before.children[beforeIndex++]
       const afterChild = after.children[afterIndex++]
 
       identityMap.set(beforeChild, afterChild)
       invertedIdentityMap.set(afterChild, beforeChild)
+
+    } else {
+      const beforeRest = beforeHtmlList.length - beforeIndex
+      const afterRest = afterHtmlList.length - afterIndex
+
+      if (beforeRest >= afterRest) beforeIndex++
+      if (beforeRest <= afterRest) afterIndex++
     }
   }
 
+  // Partial matching
   for (const beforeChild of before.children) {
     if (identityMap.get(beforeChild)) continue
 
