@@ -1,4 +1,3 @@
-import { diffArrays } from "diff"
 import { parseDOM } from "htmlparser2"
 import deepEqual from "deep-equal"
 import type { Element, Node } from "domhandler"
@@ -67,7 +66,7 @@ function markTopLevelNodeAsChanged(node?: Node | null): void {
   if (isElement(node) && node.parent && node.attribs.class !== "changed") {
     const clone = { ...node, attribs: { ...node.attribs } }
     node.name = "div"
-    node.attribs.class = "changed"
+    node.attribs = { class: "changed" }
     node.children = [clone]
   }
 }
