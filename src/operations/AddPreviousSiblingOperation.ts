@@ -11,9 +11,9 @@ export default class AddPreviousSiblingOperation extends Operation {
     if (!node) return undefined
 
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
-      const clone = parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)[0] as Element
-      const element = clone.children[0] as Element
-      element.attribs.class = (node.attribs?.class?.split(" ") ?? []).concat("added").join(" ")
+      const clone = parseDOM(toHtml(node))[0] as Element
+      clone.attribs.class = (node.attribs?.class?.split(" ") ?? []).concat("added").join(" ")
+      clone.children = [parseDOM(`<ins class="ins">${toHtml(node.children)}</ins>`)[0]]
       return clone
     } else {
       return parseDOM(`<ins class="ins">${toHtml(node)}</ins>`)[0]

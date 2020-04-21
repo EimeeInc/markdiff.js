@@ -1,4 +1,3 @@
-import { diffArrays } from "diff"
 import { parseDOM } from "htmlparser2"
 import deepEqual from "deep-equal"
 import type { Element, Node } from "domhandler"
@@ -13,7 +12,7 @@ import {
   TextDiffOperation,
 } from "./operations"
 import { isElement } from "./utils/typeGuard"
-import toHtml, { clone } from "./utils/toHtml"
+import toHtml from "./utils/toHtml"
 
 declare module "domhandler" {
   interface Node {
@@ -45,8 +44,8 @@ const detectHrefDifference = (before: Element, after: Element): boolean =>
   && before.attribs.href !== after.attribs.href
   && toHtml(before.children) === toHtml(after.children)
 
-function markLiOrTrAsChanged(node: Node): void {
-  while (node.parent && !node.parent.fragment) {
+function markLiOrTrAsChanged(node?: Node | null): void {
+  if (node) while (node.parent && !node.parent.fragment) {
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
       const { class: clazz = "" } = node.attribs
 
@@ -60,16 +59,25 @@ function markLiOrTrAsChanged(node: Node): void {
   }
 }
 
-function markTopLevelNodeAsChanged(node: Node): void {
+function markTopLevelNodeAsChanged(node?: Node | null): void {
   if (!node) return
   while (node.parent && !node.parent.fragment) node = node.parent
 
   if (isElement(node) && node.parent && node.attribs.class !== "changed") {
-    const children = clone(node)
+    const clone = { ...node, attribs: { ...node.attribs } }
     node.name = "div"
-    node.attribs.class = "changed"
-    node.children = children
+    node.attribs = { class: "changed" }
+    node.children = [clone]
   }
+}
+
+function addPreviousSibling(targetNode: Node, insertedNode: Node): void {
+  const { parent } = targetNode
+  if (!parent) return
+
+  const { children } = parent
+  const index = children.findIndex((e) => e === targetNode)
+  children.splice(index, 0, insertedNode)
 }
 
 /**
@@ -92,21 +100,34 @@ function createPatchFromChildren(before: Node, after: Node): Operation[] {
   const identityMap = new Map<Node, Node>()
   const invertedIdentityMap = new Map<Node, Node>()
 
+  // Map only equal parts
   let beforeIndex = 0
   let afterIndex = 0
 
-  for (const { added, removed } of diffArrays(before.children.map(toHtml), after.children.map(toHtml))) {
-    if (removed) beforeIndex++
-    else if (added) afterIndex++
+  const beforeHtmlList = before.children.map(toHtml)
+  const afterHtmlList = after.children.map(toHtml)
 
-    else {
-      const beforeChild = before.children[beforeIndex]
-      const afterChild = after.children[afterIndex]
+  while (beforeIndex < beforeHtmlList.length && afterIndex < afterHtmlList.length) {
+    const beforeHtml = beforeHtmlList[beforeIndex]
+    const afterHtml = afterHtmlList[afterIndex]
+
+    if (beforeHtml === afterHtml) {
+      const beforeChild = before.children[beforeIndex++]
+      const afterChild = after.children[afterIndex++]
+
       identityMap.set(beforeChild, afterChild)
       invertedIdentityMap.set(afterChild, beforeChild)
+
+    } else {
+      const beforeRest = beforeHtmlList.length - beforeIndex
+      const afterRest = afterHtmlList.length - afterIndex
+
+      if (beforeRest >= afterRest) beforeIndex++
+      if (beforeRest <= afterRest) afterIndex++
     }
   }
 
+  // Partial matching
   for (const beforeChild of before.children) {
     if (identityMap.get(beforeChild)) continue
 
@@ -177,7 +198,7 @@ export function createPatch(before: Node, after: Node): Operation[] {
 }
 
 export function applyPatch(operations: Operation[], node: Node): Node {
-  operations.sort((e) => e.priority).forEach((operation) => {
+  operations.sort((a, b) => b.priority - a.priority).forEach((operation) => {
     const { targetNode, insertedNode } = operation
     
     switch (operation.constructor) {
@@ -208,33 +229,31 @@ export function applyPatch(operations: Operation[], node: Node): Node {
         break
 
       case AddPreviousSiblingOperation:
-        if (isElement(targetNode) && insertedNode) {
-          targetNode.parent?.children.unshift(insertedNode)
+        if (insertedNode) {
+          addPreviousSibling(targetNode, insertedNode)
           
-          if (targetNode.name !== "li" && targetNode.name !== "tr") {
+          if (isElement(targetNode) && targetNode.name !== "li" && targetNode.name !== "tr") {
             markLiOrTrAsChanged(targetNode)
           }
-          markTopLevelNodeAsChanged(targetNode)
+          markTopLevelNodeAsChanged(targetNode.parent)
         }
         break
 
       case RemoveOperation:
         if (targetNode !== insertedNode) {
+          const { parent } = operation.targetNode
           Object.assign(operation.targetNode, insertedNode)
+          if (!targetNode.parent && parent && parent.parent) targetNode.parent = parent
         }
         markLiOrTrAsChanged(targetNode)
         markTopLevelNodeAsChanged(targetNode)
         break
 
       case TextDiffOperation:
-        const parent = operation.targetNode.parent
+        const { parent } = operation.targetNode
         Object.assign(operation.targetNode, insertedNode)
-        targetNode.parent = parent
-
-        if (targetNode.parent) {
-          markLiOrTrAsChanged(targetNode.parent)
-          markTopLevelNodeAsChanged(targetNode.parent)
-        }
+        markLiOrTrAsChanged(parent)
+        markTopLevelNodeAsChanged(parent)
         break
     }
   })

@@ -12,7 +12,7 @@ export default class RemoveOperation extends Operation {
 
     if (isElement(node) && (node.name === "li" || node.name === "tr")) {
       node.attribs.class = "removed"
-      node.children = parseDOM(`<del class="del">${toHtml(node)}</del>`)
+      node.children = parseDOM(`<del class="del">${toHtml(node.children)}</del>`)
       return node
     } else {
       return parseDOM(`<del class="del">${toHtml(node)}</del>`)[0]

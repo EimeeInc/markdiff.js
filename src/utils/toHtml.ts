@@ -1,6 +1,5 @@
 // https://github.com/mixu/htmlparser-to-html
 import { isDataNode, isElement } from "./typeGuard"
-import { parseDOM } from "htmlparser2"
 import type { Node } from "domhandler"
 
 const emptyTags = [
@@ -42,7 +41,7 @@ export default function toHtml(item?: Node | Node[]): string {
 
   const start = `<${name}${
     keys.length 
-      ? " " + keys.map((key) => `${key}="${escape(attribs[key])}"`).join(" ") 
+      ? " " + keys.map((key) => attribs[key] ? `${key}="${escape(attribs[key])}"` : key).join(" ") 
       : ""
   }>`
 
@@ -51,5 +50,3 @@ export default function toHtml(item?: Node | Node[]): string {
 
   return start + inner + end
 }
-
-export const clone = (node: Node) => parseDOM(toHtml(node))
