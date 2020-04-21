@@ -1,26 +1,71 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "@emotion/styled"
-import { css } from "@emotion/core"
 import Helmet from "@/components/Helmet"
 import MarkdownUnit from "@/components/molecules/MarkdownUnit"
-
-import beautify from "@/utils/beautify"
-import markdown from "@/utils/markdown"
 import render from "@/index"
+import MarkDiffUnit from "@/components/molecules/MarkDiffUnit"
 
-const Container = styled.div``
+const Container = styled.div`
+  padding: 8px;
 
-const IndexPage: React.FC = () => (
-  <Container>
-    <Helmet />
+  section > h2 {
+    margin-top: 8px;
+  }
+`
 
-    <code css={css`white-space: pre-wrap;`}>
-      {beautify(render("<p>a</p><p>a</p>", "<p>b</p><p>a</a>"))}
-    </code>
-    <code>{markdown.render("++hoge++:+1:")}</code>
+const defaultFromMarkdown = `## title
+- foo
+- bar
+`
 
-    <MarkdownUnit />
-  </Container>
-)
+const defaultToMarkdown = `## Title
+- fuba
+`
+
+const IndexPage: React.FC = () => {
+  const [fromMarkdown, setFromMarkdown] = useState(defaultFromMarkdown)
+  const [toMarkdown, setToMarkdown] = useState(defaultToMarkdown)
+  const [fromHtml, setFromHtml] = useState("")
+  const [toHtml, setToHtml] = useState("")
+
+  return (
+    <Container>
+      <Helmet>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/vs.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css" />
+      </Helmet>
+  
+      <main>
+        <h1>markdiff.js Demo</h1>
+
+        <section>
+          <h2>before</h2>
+
+          <MarkdownUnit
+            value={fromMarkdown}
+            onChange={(e) => setFromMarkdown(e.currentTarget.value)}
+            onRender={(html) => setFromHtml(html)}
+          />
+        </section>
+
+        <section>
+          <h2>after</h2>
+
+          <MarkdownUnit
+            value={toMarkdown}
+            onChange={(e) => setToMarkdown(e.currentTarget.value)}
+            onRender={(html) => setToHtml(html)}
+          />
+        </section>
+
+        <section>
+          <h2>diff</h2>
+
+          <MarkDiffUnit html={render(fromHtml, toHtml)} />
+        </section>
+      </main>
+    </Container>
+  )
+}
 
 export default IndexPage

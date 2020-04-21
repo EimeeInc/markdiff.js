@@ -1,7 +1,5 @@
-import React from "react"
+import styled from "@emotion/styled"
 
-const MarkdownInput: React.FC = () => (
-  <input />
-)
-
-export default MarkdownInput
+export default styled.textarea`
+  min-height: 160px;
+`
