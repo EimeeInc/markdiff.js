@@ -1,19 +1,11 @@
-# ignore all file
-**/*.js
-**/*.ts
-**/*.eslintignore
-.github
-.babelrc
-tsconfig.json
-package-lock.json
-public
-.cache
+**/*
 
-# exclude lib
-!src/lib/**/*.js
-!src/lib/**/*.ts
+!lib/**/*
+lib/components/
+lib/pages/
+lib/utils/beautify.d.ts
+lib/utils/markdown.d.ts
 
-# ignore gatsby
-src/lib/pages/**/*.ts
-src/lib/components/**/*.ts
-src/lib/utils/markdown.ts
+!*.md
+!LICENSE
+!package.json
