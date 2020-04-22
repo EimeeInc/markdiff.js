@@ -1,5 +1,5 @@
 {
-  "name": "markdiff.js",
+  "name": "@eimeeinc/markdiff",
   "version": "0.1.0",
   "description": "JavaScript port of r7kamura/markdiff",
   "main": "lib/index.js",
@@ -13,9 +13,15 @@
   "scripts": {
     "build": "webpack --mode production --devtool source-map",
     "build:dev": "webpack --mode development",
-    "build:page": "gatsby build",
     "dev": "gatsby develop",
-    "test": "jest"
+    "page:build": "gatsby build",
+    "page:deploy": "gatsby build --prefix-paths && gh-pages -d public",
+    "prepare": "npm run build",
+    "test": "jest",
+    "serve": "npm run page:build && gatsby serve"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "keywords": [
     "markdown",
@@ -61,6 +67,7 @@
     "gatsby-plugin-graphql-codegen": "^2.7.0",
     "gatsby-plugin-react-helmet": "^3.2.1",
     "gatsby-plugin-typescript": "^2.3.1",
+    "gh-pages": "^2.2.0",
     "highlight.js": "^9.18.1",
     "jest": "^25.3.0",
     "js-beautify": "^1.11.0",
