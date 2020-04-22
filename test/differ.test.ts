@@ -1,6 +1,6 @@
 import render from "../src"
 
-describe("markdiff test", () => {
+describe("r7kamura/markdiff/spec/markdiff/differ_spec", () => {
   test("with same node", () => {
     const html = "<p>a</p>"
     expect(render(html, html)).toBe(html)
@@ -143,5 +143,23 @@ describe("markdiff test", () => {
 
     expect(render(from, to))
       .toBe(`<div class="changed"><p><del class="del">a</del><ins class="ins">b</ins></p></div><ins class="ins"><p>c</p></ins><ins class="ins"><p>d</p></ins>`)
+  })
+})
+
+describe("own test suite", () => {
+  test("with swapped nodes", () => {
+    const to = `<p>aaa</p><h2>title</h2><ul><li>foo</li><li>bar</li></ul>`
+    const from = `<h2>title</h2><ul><li>foo</li><li>bar</li></ul><p>aaa</p>`
+
+    expect(render(from, to).replace(/\n/g, ""))
+      .toBe(`<ins class="ins"><p>aaa</p></ins><h2>title</h2><ul><li>foo</li><li>bar</li></ul><del class="del"><p>aaa</p></del>`)
+  })
+
+  test("with adding a new sibling and different text node", () => {
+    const to = `<p>aaa</p><h2>title</h2><ul><li>foo</li><li>bar</li></ul><p>bbb</p>`
+    const from = `<h2>title</h2><ul><li>foo</li><li>bar</li></ul><p>aaa</p>`
+
+    expect(render(from, to).replace(/\n/g, ""))
+      .toBe(`<ins class="ins"><p>aaa</p></ins><h2>title</h2><ul><li>foo</li><li>bar</li></ul><div class="changed"><p><del class="del">aaa</del><ins class="ins">bbb</ins></p></div>`)
   })
 })
