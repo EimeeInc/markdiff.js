@@ -1,6 +1,6 @@
 {
   "name": "@eimeeinc/markdiff",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript port of r7kamura/markdiff",
   "main": "lib/index.js",
   "repository": {
