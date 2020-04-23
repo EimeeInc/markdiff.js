@@ -10,7 +10,7 @@ https://eimeeinc.github.com/markdiff.js
 
 ## Install
 
-Please login to GitHub referring to the following URL.  
+Please login to GitHub Packages referring to the following URL.  
 https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages
 
 ```sh
