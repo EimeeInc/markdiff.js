@@ -4,10 +4,6 @@
 
 JavaScript port of [r7kamura/markdiff](https://github.com/r7kamura/markdiff).
 
-## Demo
-
-https://eimeeinc.github.com/markdiff.js
-
 ## Install
 
 Please login to GitHub Packages referring to the following URL.  
